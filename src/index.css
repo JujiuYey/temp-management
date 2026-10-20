@@ -1,0 +1,53 @@
+@import "tailwindcss";
+
+/* 放进 base 层：否则无层级样式会盖掉 @layer utilities 里的 p-*/m-* */
+@layer base {
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+
+  html, body, #root {
+    height: 100%;
+    width: 100%;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  }
+}
+
+/* 自定义滚动条 */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #d9d9d9;
+  border-radius: 3px;
+}
+
+/* 统一布局：侧边栏无自带 trigger，折叠按钮由 SideMenu 顶部提供 */
+.ant-layout-sider-trigger {
+  display: none;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #bfbfbf;
+}
+
+/* 权限目录抽屉表单标签与控件间距 */
+.catalog-form-wrapper .ant-form-item-label {
+  padding-right: 10px !important;
+}
+.catalog-form-wrapper .ant-form-item-control {
+  margin-left: 0 !important;
+}
+
+/* 平台统一：侧边菜单分组标题层级更轻 */
+.ant-menu-submenu-title {
+  font-weight: 500;
+}

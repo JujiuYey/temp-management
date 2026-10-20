@@ -1,0 +1,485 @@
+import React from 'react'
+import type { MenuProps } from 'antd'
+import {
+  ClockCircleOutlined,
+  MedicineBoxOutlined,
+  CloudOutlined,
+  SettingOutlined,
+  DashboardOutlined,
+  SmileOutlined,
+  CalendarOutlined,
+  TeamOutlined,
+  ToolOutlined,
+  ExceptionOutlined,
+  AppstoreOutlined,
+  SafetyCertificateOutlined,
+  SwapOutlined,
+  ScissorOutlined,
+  DatabaseOutlined,
+  AlertOutlined,
+  NotificationOutlined,
+  KeyOutlined,
+  ScheduleOutlined,
+  FormOutlined,
+  UnorderedListOutlined,
+  FileProtectOutlined,
+  AuditOutlined,
+  RollbackOutlined,
+  EditOutlined,
+  HistoryOutlined,
+  BarChartOutlined,
+  RadarChartOutlined,
+  FileTextOutlined,
+  ApartmentOutlined,
+  UserSwitchOutlined,
+  LoginOutlined,
+  FieldTimeOutlined,
+  AimOutlined,
+  FileDoneOutlined,
+  FileAddOutlined,
+  HomeOutlined,
+  SolutionOutlined,
+  TagsOutlined,
+  CheckSquareOutlined,
+  FileSearchOutlined,
+  SendOutlined,
+  MonitorOutlined,
+  ReadOutlined,
+  CustomerServiceOutlined,
+} from '@ant-design/icons'
+
+/** 子系统（应用）标识 */
+export type AppKey = 'attendance' | 'medical' | 'coop' | 'admin' | 'exam'
+
+export interface SubApp {
+  key: AppKey
+  /** 子系统名称 */
+  name: string
+  /** 一句话描述，用于切换面板 */
+  desc: string
+  /** 子系统图标 */
+  icon: React.ReactNode
+  /** 主题色 */
+  color: string
+  /** 进入该子系统时默认选中的菜单 */
+  defaultMenuKey: string
+}
+
+export const APPS: SubApp[] = [
+  {
+    key: 'attendance',
+    name: '考勤管理',
+    desc: '排班、打卡、假勤与考勤结果全流程管理',
+    icon: <ClockCircleOutlined />,
+    color: '#1677ff',
+    defaultMenuKey: 'dashboard',
+  },
+  {
+    key: 'medical',
+    name: '智慧医务',
+    desc: '技术、资质、轮转、手术与会诊一体化医务管理',
+    icon: <MedicineBoxOutlined />,
+    color: '#13a8a8',
+    defaultMenuKey: 'tech-catalog',
+  },
+  {
+    key: 'coop',
+    name: '协同办公',
+    desc: '个人权限等日常协同事务',
+    icon: <CloudOutlined />,
+    color: '#722ed1',
+    defaultMenuKey: 'coop-my-permission',
+  },
+  {
+    key: 'admin',
+    name: '后台管理',
+    desc: '信息集配置、预警规则与预警中心',
+    icon: <SettingOutlined />,
+    color: '#fa8c16',
+    defaultMenuKey: 'settings-info-set',
+  },
+  {
+    key: 'exam',
+    name: '考试系统',
+    desc: '培训、考试与理论实操练习一体化管理',
+    icon: <ReadOutlined />,
+    color: '#eb2f96',
+    defaultMenuKey: 'exam-dashboard',
+  },
+]
+
+export const APP_MAP: Record<AppKey, SubApp> = APPS.reduce(
+  (acc, app) => ({ ...acc, [app.key]: app }),
+  {} as Record<AppKey, SubApp>,
+)
+
+/** 各子系统功能所属映射：菜单 key → 子系统 */
+export const MENU_APP_MAP: Record<string, AppKey> = {
+  // 考勤管理
+  dashboard: 'attendance',
+  'my-schedule': 'attendance',
+  'my-attendance': 'attendance',
+  'my-leave': 'attendance',
+  'my-overtime': 'attendance',
+  'my-shift-exchange': 'attendance',
+  'attendance-period': 'attendance',
+  'attendance-unit': 'attendance',
+  'attendance-person': 'attendance',
+  'attendance-group': 'attendance',
+  'attendance-project': 'attendance',
+  'leave-rules': 'attendance',
+  'leave-grant': 'attendance',
+  'leave-balance': 'attendance',
+  'leave-request': 'attendance',
+  'shift-class': 'attendance',
+  'shift-group': 'attendance',
+  'shift-config': 'attendance',
+  'shift-integrated': 'attendance',
+  'shift-overview': 'attendance',
+  'shift-function-rule': 'attendance',
+  clock: 'attendance',
+  'card-supplement': 'attendance',
+  'overtime-request': 'attendance',
+  'attendance-confirm': 'attendance',
+  // 智慧医务
+  'tech-catalog': 'medical',
+  'tech-application': 'medical',
+  'field-config': 'medical',
+  'tech-overview': 'medical',
+  'tech-monitor': 'medical',
+  'permission-catalog': 'medical',
+  'permission-group': 'medical',
+  'permission-apply': 'medical',
+  'batch-auth': 'medical',
+  'batch-revoke': 'medical',
+  'batch-adjust': 'medical',
+  'permission-extend': 'medical',
+  'permission-analysis': 'medical',
+  'permission-monitor': 'medical',
+  'rotation-regulation': 'medical',
+  'rotation-base': 'medical',
+  'rotation-plan': 'medical',
+  'rotation-staff': 'medical',
+  'rotation-checkinout': 'medical',
+  'rotation-extend': 'medical',
+  'rotation-finalize': 'medical',
+  'rotation-assessment': 'medical',
+  'surgery-apply': 'medical',
+  'consult-room': 'medical',
+  'consult-expert': 'medical',
+  'consult-apply': 'medical',
+  'consult-schedule': 'medical',
+  'consult-checkin': 'medical',
+  'consult-followup': 'medical',
+  'consult-outgoing': 'medical',
+  'consult-outgoing-register': 'medical',
+  // 协同办公
+  'coop-my-permission': 'coop',
+  // 后台管理
+  'settings-info-set': 'admin',
+  'settings-alert-rule': 'admin',
+  'settings-alert-center': 'admin',
+  // 考试系统
+  'exam-dashboard': 'exam',
+  'exam-training': 'exam',
+  'exam-center': 'exam',
+  'exam-assist-center': 'exam',
+  'exam-booking': 'exam',
+  'exam-my-marking': 'exam',
+  'exam-questions': 'exam',
+  'exam-practical-questions': 'exam',
+  'exam-paper': 'exam',
+  'exam-open': 'exam',
+  'exam-lab-booking': 'exam',
+  'exam-lab-manage': 'exam',
+  'exam-score-item': 'exam',
+  'exam-plan-tag': 'exam',
+  'exam-plan': 'exam',
+}
+
+/** 面包屑映射：菜单 key → 「子系统 / 分组 / 菜单」 */
+export const BREADCRUMB_MAP: Record<string, string> = {
+  // ===== 考勤管理 =====
+  dashboard: '考勤管理 / 工作台',
+  'my-schedule': '考勤管理 / 考勤自助 / 我的排班',
+  'my-attendance': '考勤管理 / 考勤自助 / 我的考勤',
+  'my-leave': '考勤管理 / 考勤自助 / 我的假期',
+  'my-overtime': '考勤管理 / 考勤自助 / 我的加班',
+  'my-shift-exchange': '考勤管理 / 考勤自助 / 我的换班',
+  'attendance-period': '考勤管理 / 考勤基础设置 / 考勤期间',
+  'attendance-unit': '考勤管理 / 考勤基础设置 / 考勤单元',
+  'attendance-person': '考勤管理 / 考勤基础设置 / 考勤人员',
+  'attendance-group': '考勤管理 / 考勤基础设置 / 考勤组',
+  'attendance-project': '考勤管理 / 考勤基础设置 / 考勤项目',
+  'leave-rules': '考勤管理 / 假勤管理 / 发放规则',
+  'leave-grant': '考勤管理 / 假勤管理 / 假期发放',
+  'leave-balance': '考勤管理 / 假勤管理 / 假期余额',
+  'leave-request': '考勤管理 / 假勤管理 / 假勤申请',
+  'shift-class': '考勤管理 / 排班管理 / 排班班次',
+  'shift-group': '考勤管理 / 排班管理 / 排班分组',
+  'shift-config': '考勤管理 / 排班管理 / 排班配置',
+  'shift-integrated': '考勤管理 / 排班管理 / 综合排班',
+  'shift-overview': '考勤管理 / 排班管理 / 排班一览',
+  'shift-function-rule': '考勤管理 / 排班管理 / 职能排班规则',
+  clock: '考勤管理 / 考勤结果 / 打卡记录',
+  'card-supplement': '考勤管理 / 考勤结果 / 补卡申请',
+  'overtime-request': '考勤管理 / 考勤结果 / 加班申请',
+  'attendance-confirm': '考勤管理 / 考勤结果 / 考勤确认',
+  // ===== 智慧医务 =====
+  'tech-catalog': '智慧医务 / 技术管理 / 技术目录',
+  'tech-application': '智慧医务 / 技术管理 / 技术申请',
+  'field-config': '智慧医务 / 技术管理 / 字段配置',
+  'tech-overview': '智慧医务 / 技术管理 / 技术总览',
+  'tech-monitor': '智慧医务 / 技术管理 / 过程监控',
+  'permission-catalog': '智慧医务 / 资质权限 / 权限目录',
+  'permission-group': '智慧医务 / 资质权限 / 权限分组',
+  'permission-apply': '智慧医务 / 资质权限 / 权限申请',
+  'batch-auth': '智慧医务 / 资质权限 / 集中授权',
+  'batch-revoke': '智慧医务 / 资质权限 / 集中回收',
+  'batch-adjust': '智慧医务 / 资质权限 / 集中调整',
+  'permission-extend': '智慧医务 / 资质权限 / 权限查询',
+  'permission-analysis': '智慧医务 / 资质权限 / 权限分析',
+  'permission-monitor': '智慧医务 / 资质权限 / 权限监测',
+  'rotation-regulation': '智慧医务 / 轮转安排 / 管理细则',
+  'rotation-base': '智慧医务 / 轮转安排 / 基地管理',
+  'rotation-plan': '智慧医务 / 轮转安排 / 轮转计划',
+  'rotation-staff': '智慧医务 / 轮转安排 / 轮转人员',
+  'rotation-checkinout': '智慧医务 / 轮转安排 / 出入科管理',
+  'rotation-extend': '智慧医务 / 轮转安排 / 延期申请',
+  'rotation-finalize': '智慧医务 / 轮转安排 / 定科申请',
+  'rotation-assessment': '智慧医务 / 轮转安排 / 考核设置',
+  'surgery-apply': '智慧医务 / 手术管理 / 手术申请',
+  'consult-room': '智慧医务 / 会诊管理 / 会议室',
+  'consult-expert': '智慧医务 / 会诊管理 / MDT团队',
+  'consult-apply': '智慧医务 / 会诊管理 / 会诊申请',
+  'consult-schedule': '智慧医务 / 会诊管理 / 会诊安排',
+  'consult-checkin': '智慧医务 / 会诊管理 / 签到管理',
+  'consult-followup': '智慧医务 / 会诊管理 / 随访管理',
+  'consult-outgoing': '智慧医务 / 会诊管理 / 院外会诊邀请',
+  'consult-outgoing-register': '智慧医务 / 会诊管理 / 外出会诊登记',
+  // ===== 协同办公 =====
+  'coop-my-permission': '协同办公 / 我的权限',
+  // ===== 后台管理 =====
+  'settings-info-set': '后台管理 / 信息集配置',
+  'settings-alert-rule': '后台管理 / 预警规则',
+  'settings-alert-center': '后台管理 / 预警中心',
+  // ===== 考试系统 =====
+  'exam-dashboard': '考试系统 / 工作台',
+  'exam-training': '考试系统 / 培训管理',
+  'exam-center': '考试系统 / 考试管理 / 考试中心',
+  'exam-assist-center': '考试系统 / 考试管理 / 辅助中心',
+  'exam-booking': '考试系统 / 考试管理 / 考试预约',
+  'exam-my-marking': '考试系统 / 考试管理 / 我的阅卷',
+  'exam-questions': '考试系统 / 考试管理 / 理论题目',
+  'exam-practical-questions': '考试系统 / 考试管理 / 实操题目',
+  'exam-paper': '考试系统 / 考试管理 / 试卷维护',
+  'exam-open': '考试系统 / 开启考试',
+  'exam-lab-booking': '考试系统 / 考试管理 / 实训室预约',
+  'exam-lab-manage': '考试系统 / 基础设置 / 实训室管理',
+  'exam-score-item': '考试系统 / 基础设置 / 评分项目',
+  'exam-plan-tag': '考试系统 / 基础设置 / 考试科目',
+  'exam-plan': '考试系统 / 考试管理 / 考试计划',
+}
+
+/** 各子系统的侧边菜单 */
+export const APP_MENUS: Record<AppKey, MenuProps['items']> = {
+  // ===== 考勤管理 =====
+  attendance: [
+    {
+      key: 'dashboard',
+      icon: <DashboardOutlined />,
+      label: '工作台',
+    },
+    {
+      key: 'group-attendance-self',
+      icon: <SmileOutlined />,
+      label: '考勤自助',
+      children: [
+        { key: 'my-schedule', icon: <CalendarOutlined />, label: '我的排班' },
+        { key: 'my-attendance', icon: <CheckSquareOutlined />, label: '我的考勤' },
+        { key: 'my-leave', icon: <CalendarOutlined />, label: '我的假期' },
+        { key: 'my-overtime', icon: <FieldTimeOutlined />, label: '我的加班' },
+        { key: 'my-shift-exchange', icon: <SwapOutlined />, label: '我的换班' },
+      ],
+    },
+    {
+      key: 'group-attendance-setting',
+      icon: <CalendarOutlined />,
+      label: '考勤基础设置',
+      children: [
+        { key: 'attendance-period', icon: <ClockCircleOutlined />, label: '考勤期间' },
+        { key: 'attendance-unit', icon: <TeamOutlined />, label: '考勤单元' },
+        { key: 'attendance-person', icon: <TeamOutlined />, label: '考勤人员' },
+        { key: 'attendance-group', icon: <ToolOutlined />, label: '考勤组' },
+        { key: 'attendance-project', icon: <ToolOutlined />, label: '考勤项目' },
+      ],
+    },
+    {
+      key: 'group-leave',
+      icon: <TeamOutlined />,
+      label: '假勤管理',
+      children: [
+        { key: 'leave-rules', icon: <ToolOutlined />, label: '发放规则' },
+        { key: 'leave-grant', icon: <ToolOutlined />, label: '假期发放' },
+        { key: 'leave-balance', icon: <ToolOutlined />, label: '假期余额' },
+        { key: 'leave-request', icon: <ToolOutlined />, label: '假勤申请' },
+      ],
+    },
+    {
+      key: 'group-shift',
+      icon: <ClockCircleOutlined />,
+      label: '排班管理',
+      children: [
+        { key: 'shift-class', icon: <ToolOutlined />, label: '排班班次' },
+        { key: 'shift-group', icon: <TeamOutlined />, label: '排班分组' },
+        { key: 'shift-config', icon: <SettingOutlined />, label: '排班配置' },
+        { key: 'shift-integrated', icon: <AppstoreOutlined />, label: '综合排班' },
+        { key: 'shift-overview', icon: <UnorderedListOutlined />, label: '排班一览' },
+        { key: 'shift-function-rule', icon: <FileTextOutlined />, label: '职能排班规则' },
+      ],
+    },
+    {
+      key: 'group-attendance-result',
+      icon: <ExceptionOutlined />,
+      label: '考勤结果',
+      children: [
+        { key: 'clock', icon: <ClockCircleOutlined />, label: '打卡记录' },
+        { key: 'card-supplement', icon: <ToolOutlined />, label: '补卡申请' },
+        { key: 'overtime-request', icon: <UserSwitchOutlined />, label: '加班申请' },
+        { key: 'attendance-confirm', icon: <CheckSquareOutlined />, label: '考勤确认' },
+      ],
+    },
+  ],
+  // ===== 智慧医务 =====
+  medical: [
+    {
+      key: 'group-tech',
+      icon: <AppstoreOutlined />,
+      label: '技术管理',
+      children: [
+        { key: 'tech-catalog', icon: <AppstoreOutlined />, label: '技术目录' },
+        { key: 'tech-application', icon: <FormOutlined />, label: '技术申请' },
+        { key: 'field-config', icon: <SettingOutlined />, label: '字段配置' },
+        { key: 'tech-overview', icon: <DashboardOutlined />, label: '技术总览' },
+        { key: 'tech-monitor', icon: <MonitorOutlined />, label: '过程监控' },
+      ],
+    },
+    {
+      key: 'group-permission',
+      icon: <SafetyCertificateOutlined />,
+      label: '资质权限',
+      children: [
+        { key: 'permission-catalog', icon: <UnorderedListOutlined />, label: '权限目录' },
+        { key: 'permission-group', icon: <TeamOutlined />, label: '权限分组' },
+        { key: 'permission-apply', icon: <FileProtectOutlined />, label: '权限申请' },
+        { key: 'batch-auth', icon: <AuditOutlined />, label: '集中授权' },
+        { key: 'batch-revoke', icon: <RollbackOutlined />, label: '集中回收' },
+        { key: 'batch-adjust', icon: <EditOutlined />, label: '集中调整' },
+        { key: 'permission-extend', icon: <HistoryOutlined />, label: '权限查询' },
+        { key: 'permission-analysis', icon: <BarChartOutlined />, label: '权限分析' },
+        { key: 'permission-monitor', icon: <RadarChartOutlined />, label: '权限监测' },
+      ],
+    },
+    {
+      key: 'group-rotation',
+      icon: <SwapOutlined />,
+      label: '轮转安排',
+      children: [
+        { key: 'rotation-regulation', icon: <FileTextOutlined />, label: '管理细则' },
+        { key: 'rotation-base', icon: <ApartmentOutlined />, label: '基地管理' },
+        { key: 'rotation-plan', icon: <CalendarOutlined />, label: '轮转计划' },
+        { key: 'rotation-staff', icon: <UserSwitchOutlined />, label: '轮转人员' },
+        { key: 'rotation-checkinout', icon: <LoginOutlined />, label: '出入科管理' },
+        { key: 'rotation-extend', icon: <FieldTimeOutlined />, label: '延期申请' },
+        { key: 'rotation-finalize', icon: <AimOutlined />, label: '定科申请' },
+        { key: 'rotation-assessment', icon: <FileDoneOutlined />, label: '考核设置' },
+      ],
+    },
+    {
+      key: 'group-surgery',
+      icon: <ScissorOutlined />,
+      label: '手术管理',
+      children: [{ key: 'surgery-apply', icon: <FileAddOutlined />, label: '手术申请' }],
+    },
+    {
+      key: 'group-consultation',
+      icon: <MedicineBoxOutlined />,
+      label: '会诊管理',
+      children: [
+        { key: 'consult-room', icon: <HomeOutlined />, label: '会议室' },
+        { key: 'consult-expert', icon: <SolutionOutlined />, label: 'MDT团队' },
+        { key: 'consult-apply', icon: <FileTextOutlined />, label: '会诊申请' },
+        { key: 'consult-schedule', icon: <CalendarOutlined />, label: '会诊安排' },
+        { key: 'consult-checkin', icon: <CheckSquareOutlined />, label: '签到管理' },
+        { key: 'consult-followup', icon: <FileSearchOutlined />, label: '随访管理' },
+        { key: 'consult-outgoing', icon: <SendOutlined />, label: '院外会诊邀请' },
+        { key: 'consult-outgoing-register', icon: <FileAddOutlined />, label: '外出会诊登记' },
+      ],
+    },
+  ],
+  // ===== 协同办公 =====
+  coop: [
+    {
+      key: 'group-coop',
+      icon: <CloudOutlined />,
+      label: '协同办公',
+      children: [
+        { key: 'coop-my-permission', icon: <KeyOutlined />, label: '我的权限' },
+      ],
+    },
+  ],
+  // ===== 后台管理 =====
+  admin: [
+    {
+      key: 'group-admin',
+      icon: <SettingOutlined />,
+      label: '后台管理',
+      children: [
+        { key: 'settings-info-set', icon: <DatabaseOutlined />, label: '信息集配置' },
+        { key: 'settings-alert-rule', icon: <AlertOutlined />, label: '预警规则' },
+        { key: 'settings-alert-center', icon: <NotificationOutlined />, label: '预警中心' },
+      ],
+    },
+  ],
+  // ===== 考试系统 =====
+  exam: [
+    { key: 'exam-dashboard', icon: <DashboardOutlined />, label: '工作台' },
+    { key: 'exam-training', icon: <ReadOutlined />, label: '培训管理' },
+    {
+      key: 'group-exam-theory',
+      icon: <EditOutlined />,
+      label: '考试管理',
+      children: [
+        { key: 'exam-center', icon: <AppstoreOutlined />, label: '考试中心' },
+        { key: 'exam-assist-center', icon: <CustomerServiceOutlined />, label: '辅助中心' },
+        { key: 'exam-booking', icon: <ScheduleOutlined />, label: '考试预约' },
+        { key: 'exam-my-marking', icon: <AuditOutlined />, label: '我的阅卷' },
+        { key: 'exam-questions', icon: <FileTextOutlined />, label: '理论题目' },
+        { key: 'exam-practical-questions', icon: <ToolOutlined />, label: '实操题目' },
+        { key: 'exam-paper', icon: <FormOutlined />, label: '试卷维护' },
+        { key: 'exam-open', icon: <ScheduleOutlined />, label: '开启考试' },
+        { key: 'exam-plan', icon: <CalendarOutlined />, label: '考试计划' },
+        { key: 'exam-lab-booking', icon: <ScheduleOutlined />, label: '实训室预约' },
+      ],
+    },
+    {
+      key: 'group-exam-practice',
+      icon: <ToolOutlined />,
+      label: '基础设置',
+      children: [
+        { key: 'exam-lab-manage', icon: <HomeOutlined />, label: '实训室管理' },
+        { key: 'exam-score-item', icon: <AimOutlined />, label: '评分项目' },
+        { key: 'exam-plan-tag', icon: <TagsOutlined />, label: '考试科目' },
+      ],
+    },
+  ],
+}
+
+/** 各子系统默认展开的菜单分组 */
+export const DEFAULT_OPEN_KEYS: Record<AppKey, string[]> = {
+  attendance: ['group-attendance-setting'],
+  medical: ['group-tech'],
+  coop: ['group-coop'],
+  admin: ['group-admin'],
+  exam: ['group-exam-theory', 'exam-open'],
+}
