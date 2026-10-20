@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
-# 将 dist/ 目录发布到 Gitee Pages 使用的 gh-pages 分支。
-# 用法：npm run build && bash scripts/deploy-pages.sh
+# 将 dist/ 目录发布到 gh-pages 分支（Gitee / GitHub 都会推送，存在的 remote 才推）。
+# 用法：npm run deploy:pages
 set -euo pipefail
 cd "$(dirname "$0")/.."
 
@@ -9,7 +9,6 @@ if [ ! -f dist/index.html ]; then
   exit 1
 fi
 
-REMOTE_URL=$(git remote get-url origin)
 AUTHOR_NAME=$(git log -1 --format=%an)
 AUTHOR_EMAIL=$(git log -1 --format=%ae)
 TMP_DIR=$(mktemp -d)
@@ -23,7 +22,14 @@ git init -q -b gh-pages
 git add -A
 git -c user.name="$AUTHOR_NAME" -c user.email="$AUTHOR_EMAIL" \
   commit -q -m "deploy: $(date '+%Y-%m-%d %H:%M:%S')"
-git push -f "$REMOTE_URL" gh-pages
 
-echo "已推送到 gh-pages 分支。"
-echo "若 Gitee Pages 已开启，请到 仓库 → 服务 → Gitee Pages 点击「更新」使新版本生效。"
+cd - >/dev/null
+for remote in origin github; do
+  if git remote get-url "$remote" >/dev/null 2>&1; then
+    url=$(git remote get-url "$remote")
+    echo "==> 推送到 $remote ($url)"
+    git -C "$TMP_DIR" push -f "$url" gh-pages
+  fi
+done
+
+echo "完成。GitHub Pages 会自动生效；Gitee Pages 已下线，无需再管。"
