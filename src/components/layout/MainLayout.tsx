@@ -1,15 +1,17 @@
-import React, { useState } from 'react'
-import { Layout } from 'antd'
+import React, { lazy, Suspense, useState } from 'react'
+import { Layout, Spin } from 'antd'
 import TopNavbar from './TopNavbar'
 import SideMenu from './SideMenu'
 import AppSwitcher from './AppSwitcher'
-import AttendanceApp from '../attendance/AttendanceApp'
-import MedicalApp from '../medical/MedicalApp'
-import CoopApp from '../coop/CoopApp'
-import AdminApp from '../admin/AdminApp'
-import ExamApp from '../exam/ExamApp'
 import { APP_MAP, BREADCRUMB_MAP, type AppKey } from '../../config/apps'
 import { COLORS, LAYOUT } from '../../config/theme'
+
+// 子系统按需加载，避免首屏把 5 个子系统的代码（含图表库）全部下载
+const AttendanceApp = lazy(() => import('../attendance/AttendanceApp'))
+const MedicalApp = lazy(() => import('../medical/MedicalApp'))
+const CoopApp = lazy(() => import('../coop/CoopApp'))
+const AdminApp = lazy(() => import('../admin/AdminApp'))
+const ExamApp = lazy(() => import('../exam/ExamApp'))
 
 const { Header, Content } = Layout
 
@@ -103,7 +105,17 @@ const MainLayout: React.FC = () => {
               overflowY: 'auto',
             }}
           >
-            {renderContent()}
+            <Suspense
+              fallback={
+                <div style={{ display: 'flex', justifyContent: 'center', paddingTop: 120 }}>
+                  <Spin tip="加载中…" size="large">
+                    <div style={{ width: 120, height: 60 }} />
+                  </Spin>
+                </div>
+              }
+            >
+              {renderContent()}
+            </Suspense>
           </Content>
         </Layout>
       </Layout>

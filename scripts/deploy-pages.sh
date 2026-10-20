@@ -28,7 +28,9 @@ for remote in origin github; do
   if git remote get-url "$remote" >/dev/null 2>&1; then
     url=$(git remote get-url "$remote")
     echo "==> 推送到 $remote ($url)"
-    git -C "$TMP_DIR" push -f "$url" gh-pages
+    if ! git -C "$TMP_DIR" push -f "$url" gh-pages; then
+      echo "!! $remote 推送失败，已跳过（不影响其他站点）" >&2
+    fi
   fi
 done
 
